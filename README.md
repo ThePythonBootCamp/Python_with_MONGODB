@@ -8,67 +8,62 @@ MongoDB is a NoSQL database. MongoDB stores data in a JSON like document which m
 
 ### SQL versus NoSQL
 
-![SQL versus NoSQL](../images/mongoDB/sql-vs-nosql.png)
+![SQL versus NoSQL](./images/mongoDB/sql-vs-nosql.png)
 
 In this section, we will focus on a NoSQL database MongoDB. Lets sign up on [mongoDB](https://www.mongodb.com/) by click on the sign in button then click register on the next page.
 
-![MongoDB Sign up pages](../images/mongoDB/mongodb-signup-page.png)
+![MongoDB Sign up pages](./images/mongoDB/mongodb-signup-page.png)
 
 Complete the fields and click continue
 
-![Mongodb register](../images/mongoDB/mongodb-register.png)
+![Mongodb register](./images/mongoDB/mongodb-register.png)
 
 Select the free plan
 
-![Mongodb free plan](../images/mongoDB/mongodb-free.png)
+![Mongodb free plan](./images/mongoDB/mongodb-free.png)
 
 Choose the proximate free region and give any name for you cluster.
 
-![Mongodb cluster name](../images/mongoDB/mongodb-cluster-name.png)
+![Mongodb cluster name](./images/mongoDB/mongodb-cluster-name.png)
 
 Now, a free sandbox is created
 
-![Mongodb sandbox](../images/mongoDB/mongodb-sandbox.png)
+Create Database User
+![Mongodb Create Database](./images/mongoDB/mongodb-cluster-connect.png)
 
-All local host access
+Choose Connection
 
-![Mongodb allow ip access](../images/mongoDB/mongodb-allow-ip-access.png)
+![Mongodb Choose Connection](./images/mongoDB/mongod-choose-connection.png)
 
-Add user and password
 
-![Mongodb add user](../images/mongoDB/mongodb-add-user.png)
+Select Drivers
 
-Create a mongoDB uri link
+![Mongodb Connection method](./images/mongoDB/mongod-select-using-drivers.png)
 
-![Mongodb create uri](../images/mongoDB/mongodb-create-uri.png)
+Select Python version, install driver and Copy connectioon string
 
-Select Python 3.6 or above driver
+![Mongodb Driver version](./images/mongoDB/mongod-python-ver-string.png)
 
-![Mongodb python driver](../images/mongoDB/mongodb-python-driver.png)
+
 
 ### Getting Connection String(MongoDB URI)
 
 Copy the connection string link and you will get something like this
 
-```sh
-mongodb+srv://asabeneh:<password>@30daysofpython-twxkr.mongodb.net/test?retryWrites=true&w=majority
-```
-
-Do not worry about the url, it is a means to connect your application with mongoDB.
-Let us replace the password placeholder with the password you used to add a user.
 
 **Example:**
 
 ```sh
-mongodb+srv://asabeneh:123123123@30daysofpython-twxkr.mongodb.net/test?retryWrites=true&w=majority
+mongodb+srv://kennedyekanem:iVaKT9bnW3zXuMhn@flaskapp.5qvpcvz.mongodb.net/?retryWrites=true&w=majority&appName=flaskapp
 ```
 
-Now, I replaced everything and the password is 123123 and the name of the database is thirty_days_python. This is just an example, your password must be a bit stronger than this.
+Now, I replaced everything and the password is iVaKT9bnW3zXuMhn and the name of the database is flaskapp. T
 
 Python needs a mongoDB driver to access mongoDB database. We will use _pymongo_ with _dnspython_ to connect our application with mongoDB base . Inside your project directory install pymongo and dnspython.
 
 ```sh
-pip install pymongo dnspython
+pip install "pymongo[srv]"==3.11
+pip install dnspython
 ```
 
 The "dnspython" module must be installed to use mongodb+srv:// URIs. The dnspython is a DNS toolkit for Python. It supports almost all record types.
@@ -79,7 +74,8 @@ The "dnspython" module must be installed to use mongodb+srv:// URIs. The dnspyth
 # let's import the flask
 from flask import Flask, render_template
 import os # importing operating system module
-MONGODB_URI = 'mongodb+srv://asabeneh:your_password_goes_here@30daysofpython-twxkr.mongodb.net/test?retryWrites=true&w=majority'
+import pymongo
+MONGODB_URI = 'mongodb+srv://kennedyekanem:iVaKT9bnW3zXuMhn@flaskapp.5qvpcvz.mongodb.net/?retryWrites=true&w=majority&appName=flaskapp'
 client = pymongo.MongoClient(MONGODB_URI)
 print(client.list_database_names())
 
@@ -100,7 +96,7 @@ When we run the above code we get the default mongoDB databases.
 
 ### Creating a database and collection
 
-Let us create a database, database and collection in mongoDB will be created if it doesn't exist. Let's create a data base name _thirty_days_of_python_ and _students_ collection.
+Let us create a database, database and collection in mongoDB will be created if it doesn't exist. Let's create a data base name _flaskapp_ and _students_ collection.
 To create a database
 
 ```sh
@@ -112,12 +108,13 @@ db = client['name_of_database']
 # let's import the flask
 from flask import Flask, render_template
 import os # importing operating system module
-MONGODB_URI = 'mongodb+srv://asabeneh:your_password_goes_here@30daysofpython-twxkr.mongodb.net/test?retryWrites=true&w=majority'
+import pymongo
+MONGODB_URI = 'mongodb+srv://kennedyekanem:iVaKT9bnW3zXuMhn@flaskapp.5qvpcvz.mongodb.net/?retryWrites=true&w=majority&appName=flaskapp'
 client = pymongo.MongoClient(MONGODB_URI)
 # Creating database
-db = client.thirty_days_of_python
+db = client.flaskapp
 # Creating students collection and inserting a document
-db.students.insert_one({'name': 'Asabeneh', 'country': 'Finland', 'city': 'Helsinki', 'age': 250})
+db.students.insert_one({'name': 'Kennedy', 'country': 'Finland', 'city': 'Helsinki', 'age': 250})
 print(client.list_database_names())
 
 app = Flask(__name__)
@@ -129,18 +126,23 @@ if __name__ == '__main__':
 ```
 
 After we create a database, we also created a students collection and we used *insert_one()* method to insert a document.
-Now, the database *thirty_days_of_python* and *students* collection have been created and the document has been inserted.
+Now, the database *flaskapp* and *students* collection have been created and the document has been inserted.
 Check your mongoDB cluster and you will see both the database and the collection. Inside the collection, there will be a document.
 
 ```sh
-['thirty_days_of_python', 'admin', 'local']
+['flaskapp', 'admin', 'local']
 ```
 
 If you see this on the mongoDB cluster, it means you have successfully created a database and a collection.
 
-![Creating database and collection](../images/mongoDB/mongodb-creating_database.png)
+![Creating database and collection](./images/mongoDB/mongod-browsw-collectiosn.png)
 
-If you have seen on the figure, the document has been created with a long id which acts as a primary key. Every time we create a document mongoDB create and unique id for it.
+<!-- If you have seen on the figure, the document has been created with a long id which acts as a primary key. Every time we create a document mongoDB create and unique id for it. -->
+
+
+
+![Creating database and collection](./images/mongoDB/mongodb-database-collection.png)
+
 
 ### Inserting many documents to collection
 
@@ -151,7 +153,8 @@ We can use for loop to inset many documents at once.
 # let's import the flask
 from flask import Flask, render_template
 import os # importing operating system module
-MONGODB_URI = 'mongodb+srv://asabeneh:your_password_goes_here@30daysofpython-twxkr.mongodb.net/test?retryWrites=true&w=majority'
+import pymongo
+MONGODB_URI = 'mongodb+srv://kennedyekanem:iVaKT9bnW3zXuMhn@flaskapp.5qvpcvz.mongodb.net/?retryWrites=true&w=majority&appName=flaskapp'
 client = pymongo.MongoClient(MONGODB_URI)
 
 students = [
@@ -182,9 +185,10 @@ Let us use the _find_one()_ method to get a document in a database collection.
 # let's import the flask
 from flask import Flask, render_template
 import os # importing operating system module
-MONGODB_URI = 'mongodb+srv://asabeneh:your_password_goes_here@30daysofpython-twxkr.mongodb.net/test?retryWrites=true&w=majority'
+import pymongo
+MONGODB_URI = 'mongodb+srv://kennedyekanem:iVaKT9bnW3zXuMhn@flaskapp.5qvpcvz.mongodb.net/?retryWrites=true&w=majority&appName=flaskapp'
 client = pymongo.MongoClient(MONGODB_URI)
-db = client['thirty_days_of_python'] # accessing the database
+db = client['flaskapp'] # accessing the database
 student = db.students.find_one()
 print(student)
 
@@ -199,7 +203,7 @@ if __name__ == '__main__':
 ```
 
 ```sh
-{'_id': ObjectId('5df68a21f106fe2d315bbc8b'), 'name': 'Asabeneh', 'country': 'Helsinki', 'city': 'Helsinki', 'age': 250}
+{'_id': ObjectId('5df68a21f106fe2d315bbc8b'), 'name': 'fKennedy', 'country': 'Helsinki', 'city': 'Helsinki', 'age': 250}
 ```
 
 The above query returns the first entry but we can target specific document using specific \_id. Let us do one example, use David's id to get David object.
@@ -209,10 +213,11 @@ The above query returns the first entry but we can target specific document usin
 # let's import the flask
 from flask import Flask, render_template
 import os # importing operating system module
+import pymongo
 from bson.objectid import ObjectId # id object
-MONGODB_URI = 'mongodb+srv://asabeneh:your_password_goes_here@30daysofpython-twxkr.mongodb.net/test?retryWrites=true&w=majority'
+MONGODB_URI = 'mongodb+srv://kennedyekanem:iVaKT9bnW3zXuMhn@flaskapp.5qvpcvz.mongodb.net/?retryWrites=true&w=majority&appName=flaskapp'
 client = pymongo.MongoClient(MONGODB_URI)
-db = client['thirty_days_of_python'] # accessing the database
+db = client['flaskapp'] # accessing the database
 student = db.students.find_one({'_id':ObjectId('5df68a23f106fe2d315bbc8c')})
 print(student)
 
@@ -236,10 +241,10 @@ We have seen, how to use _find_one()_ using the above examples. Let's move one t
 # let's import the flask
 from flask import Flask, render_template
 import os # importing operating system module
-
-MONGODB_URI = 'mongodb+srv://asabeneh:your_password_goes_here@30daysofpython-twxkr.mongodb.net/test?retryWrites=true&w=majority'
+import pymongo
+MONGODB_URI = 'mongodb+srv://kennedyekanem:iVaKT9bnW3zXuMhn@flaskapp.5qvpcvz.mongodb.net/?retryWrites=true&w=majority&appName=flaskapp'
 client = pymongo.MongoClient(MONGODB_URI)
-db = client['thirty_days_of_python'] # accessing the database
+db = client['flaskapp'] # accessing the database
 students = db.students.find()
 for student in students:
     print(student)
@@ -253,7 +258,7 @@ if __name__ == '__main__':
 ```
 
 ```sh
-{'_id': ObjectId('5df68a21f106fe2d315bbc8b'), 'name': 'Asabeneh', 'country': 'Finland', 'city': 'Helsinki', 'age': 250}
+{'_id': ObjectId('5df68a21f106fe2d315bbc8b'), 'name': 'Kennedy', 'country': 'Finland', 'city': 'Helsinki', 'age': 250}
 {'_id': ObjectId('5df68a23f106fe2d315bbc8c'), 'name': 'David', 'country': 'UK', 'city': 'London', 'age': 34}
 {'_id': ObjectId('5df68a23f106fe2d315bbc8d'), 'name': 'John', 'country': 'Sweden', 'city': 'Stockholm', 'age': 28}
 {'_id': ObjectId('5df68a23f106fe2d315bbc8e'), 'name': 'Sami', 'country': 'Finland', 'city': 'Helsinki', 'age': 25}
@@ -265,10 +270,10 @@ We can specify which fields to return by passing second object in the _find({}, 
 # let's import the flask
 from flask import Flask, render_template
 import os # importing operating system module
-
-MONGODB_URI = 'mongodb+srv://asabeneh:your_password_goes_here@30daysofpython-twxkr.mongodb.net/test?retryWrites=true&w=majority'
+import pymongo
+MONGODB_URI = 'mongodb+srv://kennedyekanem:iVaKT9bnW3zXuMhn@flaskapp.5qvpcvz.mongodb.net/?retryWrites=true&w=majority&appName=flaskapp'
 client = pymongo.MongoClient(MONGODB_URI)
-db = client['thirty_days_of_python'] # accessing the database
+db = client['flaskapp'] # accessing the database
 students = db.students.find({}, {"_id":0,  "name": 1, "country":1}) # 0 means not include and 1 means include
 for student in students:
     print(student)
@@ -282,7 +287,7 @@ if __name__ == '__main__':
 ```
 
 ```sh
-{'name': 'Asabeneh', 'country': 'Finland'}
+{'name': 'Kennedy', 'country': 'Finland'}
 {'name': 'David', 'country': 'UK'}
 {'name': 'John', 'country': 'Sweden'}
 {'name': 'Sami', 'country': 'Finland'}
@@ -296,10 +301,10 @@ In mongoDB find take a query object. We can pass a query object and we can filte
 # let's import the flask
 from flask import Flask, render_template
 import os # importing operating system module
-
-MONGODB_URI = 'mongodb+srv://asabeneh:your_password_goes_here@30daysofpython-twxkr.mongodb.net/test?retryWrites=true&w=majority'
+import pymongo
+MONGODB_URI = 'mongodb+srv://kennedyekanem:iVaKT9bnW3zXuMhn@flaskapp.5qvpcvz.mongodb.net/?retryWrites=true&w=majority&appName=flaskapp'
 client = pymongo.MongoClient(MONGODB_URI)
-db = client['thirty_days_of_python'] # accessing the database
+db = client['flaskapp'] # accessing the database
 
 query = {
     "country":"Finland"
@@ -319,7 +324,7 @@ if __name__ == '__main__':
 ```
 
 ```sh
-{'_id': ObjectId('5df68a21f106fe2d315bbc8b'), 'name': 'Asabeneh', 'country': 'Finland', 'city': 'Helsinki', 'age': 250}
+{'_id': ObjectId('5df68a21f106fe2d315bbc8b'), 'name': 'Kennedy', 'country': 'Finland', 'city': 'Helsinki', 'age': 250}
 {'_id': ObjectId('5df68a23f106fe2d315bbc8e'), 'name': 'Sami', 'country': 'Finland', 'city': 'Helsinki', 'age': 25}
 ```
 
@@ -330,10 +335,9 @@ Query with modifiers
 from flask import Flask, render_template
 import os # importing operating system module
 import pymongo
-
-MONGODB_URI = 'mongodb+srv://asabeneh:your_password_goes_here@30daysofpython-twxkr.mongodb.net/test?retryWrites=true&w=majority'
+MONGODB_URI = 'mongodb+srv://kennedyekanem:iVaKT9bnW3zXuMhn@flaskapp.5qvpcvz.mongodb.net/?retryWrites=true&w=majority&appName=flaskapp'
 client = pymongo.MongoClient(MONGODB_URI)
-db = client['thirty_days_of_python'] # accessing the database
+db = client['flaskapp'] # accessing the database
 
 query = {
     "city":"Helsinki"
@@ -352,7 +356,7 @@ if __name__ == '__main__':
 ```
 
 ```sh
-{'_id': ObjectId('5df68a21f106fe2d315bbc8b'), 'name': 'Asabeneh', 'country': 'Finland', 'city': 'Helsinki', 'age': 250}
+{'_id': ObjectId('5df68a21f106fe2d315bbc8b'), 'name': 'Kennedy', 'country': 'Finland', 'city': 'Helsinki', 'age': 250}
 {'_id': ObjectId('5df68a23f106fe2d315bbc8e'), 'name': 'Sami', 'country': 'Finland', 'city': 'Helsinki', 'age': 25}
 ```
 
@@ -364,9 +368,9 @@ from flask import Flask, render_template
 import os # importing operating system module
 import pymongo
 
-MONGODB_URI = 'mongodb+srv://asabeneh:your_password_goes_here@30daysofpython-twxkr.mongodb.net/test?retryWrites=true&w=majority'
+MONGODB_URI = 'mongodb+srv://kennedyekanem:iVaKT9bnW3zXuMhn@flaskapp.5qvpcvz.mongodb.net/?retryWrites=true&w=majority&appName=flaskapp'
 client = pymongo.MongoClient(MONGODB_URI)
-db = client['thirty_days_of_python'] # accessing the database
+db = client['flaskapp'] # accessing the database
 query = {
     "country":"Finland",
     "city":"Helsinki"
@@ -385,7 +389,7 @@ if __name__ == '__main__':
 ```
 
 ```sh
-{'_id': ObjectId('5df68a21f106fe2d315bbc8b'), 'name': 'Asabeneh', 'country': 'Finland', 'city': 'Helsinki', 'age': 250}
+{'_id': ObjectId('5df68a21f106fe2d315bbc8b'), 'name': 'Kennedy', 'country': 'Finland', 'city': 'Helsinki', 'age': 250}
 {'_id': ObjectId('5df68a23f106fe2d315bbc8e'), 'name': 'Sami', 'country': 'Finland', 'city': 'Helsinki', 'age': 25}
 ```
 
@@ -397,9 +401,9 @@ from flask import Flask, render_template
 import os # importing operating system module
 import pymongo
 
-MONGODB_URI = 'mongodb+srv://asabeneh:your_password_goes_here@30daysofpython-twxkr.mongodb.net/test?retryWrites=true&w=majority'
+MONGODB_URI = 'mongodb+srv://kennedyekanem:iVaKT9bnW3zXuMhn@flaskapp.5qvpcvz.mongodb.net/?retryWrites=true&w=majority&appName=flaskapp'
 client = pymongo.MongoClient(MONGODB_URI)
-db = client['thirty_days_of_python'] # accessing the database
+db = client['flaskapp'] # accessing the database
 query = {"age":{"$gt":30}}
 students = db.students.find(query)
 for student in students:
@@ -414,7 +418,7 @@ if __name__ == '__main__':
 ```
 
 ```sh
-{'_id': ObjectId('5df68a21f106fe2d315bbc8b'), 'name': 'Asabeneh', 'country': 'Finland', 'city': 'Helsinki', 'age': 250}
+{'_id': ObjectId('5df68a21f106fe2d315bbc8b'), 'name': 'Kennedy', 'country': 'Finland', 'city': 'Helsinki', 'age': 250}
 {'_id': ObjectId('5df68a23f106fe2d315bbc8c'), 'name': 'David', 'country': 'UK', 'city': 'London', 'age': 34}
 ```
 
@@ -424,9 +428,9 @@ from flask import Flask, render_template
 import os # importing operating system module
 import pymongo
 
-MONGODB_URI = 'mongodb+srv://asabeneh:your_password_goes_here@30daysofpython-twxkr.mongodb.net/test?retryWrites=true&w=majority'
+MONGODB_URI = 'mongodb+srv://kennedyekanem:iVaKT9bnW3zXuMhn@flaskapp.5qvpcvz.mongodb.net/?retryWrites=true&w=majority&appName=flaskapp'
 client = pymongo.MongoClient(MONGODB_URI)
-db = client['thirty_days_of_python'] # accessing the database
+db = client['flaskapp'] # accessing the database
 query = {"age":{"$gt":30}}
 students = db.students.find(query)
 for student in students:
@@ -448,9 +452,9 @@ from flask import Flask, render_template
 import os # importing operating system module
 import pymongo
 
-MONGODB_URI = 'mongodb+srv://asabeneh:your_password_goes_here@30daysofpython-twxkr.mongodb.net/test?retryWrites=true&w=majority'
+MONGODB_URI = 'mongodb+srv://kennedyekanem:iVaKT9bnW3zXuMhn@flaskapp.5qvpcvz.mongodb.net/?retryWrites=true&w=majority&appName=flaskapp'
 client = pymongo.MongoClient(MONGODB_URI)
-db = client['thirty_days_of_python'] # accessing the database
+db = client['flaskapp'] # accessing the database
 db.students.find().limit(3)
 ```
 
@@ -464,9 +468,9 @@ from flask import Flask, render_template
 import os # importing operating system module
 import pymongo
 
-MONGODB_URI = 'mongodb+srv://asabeneh:your_password_goes_here@30daysofpython-twxkr.mongodb.net/test?retryWrites=true&w=majority'
+MONGODB_URI = 'mongodb+srv://kennedyekanem:iVaKT9bnW3zXuMhn@flaskapp.5qvpcvz.mongodb.net/?retryWrites=true&w=majority&appName=flaskapp'
 client = pymongo.MongoClient(MONGODB_URI)
-db = client['thirty_days_of_python'] # accessing the database
+db = client['flaskapp'] # accessing the database
 students = db.students.find().sort('name')
 for student in students:
     print(student)
@@ -495,7 +499,7 @@ if __name__ == '__main__':
 Ascending order
 
 ```sh
-{'_id': ObjectId('5df68a21f106fe2d315bbc8b'), 'name': 'Asabeneh', 'country': 'Finland', 'city': 'Helsinki', 'age': 250}
+{'_id': ObjectId('5df68a21f106fe2d315bbc8b'), 'name': 'Kennedy', 'country': 'Finland', 'city': 'Helsinki', 'age': 250}
 {'_id': ObjectId('5df68a23f106fe2d315bbc8c'), 'name': 'David', 'country': 'UK', 'city': 'London', 'age': 34}
 {'_id': ObjectId('5df68a23f106fe2d315bbc8d'), 'name': 'John', 'country': 'Sweden', 'city': 'Stockholm', 'age': 28}
 {'_id': ObjectId('5df68a23f106fe2d315bbc8e'), 'name': 'Sami', 'country': 'Finland', 'city': 'Helsinki', 'age': 25}
@@ -507,13 +511,13 @@ Descending order
 {'_id': ObjectId('5df68a23f106fe2d315bbc8e'), 'name': 'Sami', 'country': 'Finland', 'city': 'Helsinki', 'age': 25}
 {'_id': ObjectId('5df68a23f106fe2d315bbc8d'), 'name': 'John', 'country': 'Sweden', 'city': 'Stockholm', 'age': 28}
 {'_id': ObjectId('5df68a23f106fe2d315bbc8c'), 'name': 'David', 'country': 'UK', 'city': 'London', 'age': 34}
-{'_id': ObjectId('5df68a21f106fe2d315bbc8b'), 'name': 'Asabeneh', 'country': 'Finland', 'city': 'Helsinki', 'age': 250}
+{'_id': ObjectId('5df68a21f106fe2d315bbc8b'), 'name': 'Kennedy', 'country': 'Finland', 'city': 'Helsinki', 'age': 250}
 ```
 
 ### Update with query
 
 We will use *update_one()* method to update one item. It takes two object one is a query and the second is the new object.
-The first person, Asabeneh got a very implausible age. Let us update Asabeneh's age.
+The first person, Kennedy got a very implausible age. Let us update Kennedy's age.
 
 ```py
 # let's import the flask
@@ -521,9 +525,9 @@ from flask import Flask, render_template
 import os # importing operating system module
 import pymongo
 
-MONGODB_URI = 'mongodb+srv://asabeneh:your_password_goes_here@30daysofpython-twxkr.mongodb.net/test?retryWrites=true&w=majority'
+MONGODB_URI = 'mongodb+srv://kennedyekanem:iVaKT9bnW3zXuMhn@flaskapp.5qvpcvz.mongodb.net/?retryWrites=true&w=majority&appName=flaskapp'
 client = pymongo.MongoClient(MONGODB_URI)
-db = client['thirty_days_of_python'] # accessing the database
+db = client['flaskapp'] # accessing the database
 
 query = {'age':250}
 new_value = {'$set':{'age':38}}
@@ -543,7 +547,7 @@ if __name__ == '__main__':
 ```
 
 ```sh
-{'_id': ObjectId('5df68a21f106fe2d315bbc8b'), 'name': 'Asabeneh', 'country': 'Finland', 'city': 'Helsinki', 'age': 38}
+{'_id': ObjectId('5df68a21f106fe2d315bbc8b'), 'name': 'Kennedy', 'country': 'Finland', 'city': 'Helsinki', 'age': 38}
 {'_id': ObjectId('5df68a23f106fe2d315bbc8c'), 'name': 'David', 'country': 'UK', 'city': 'London', 'age': 34}
 {'_id': ObjectId('5df68a23f106fe2d315bbc8d'), 'name': 'John', 'country': 'Sweden', 'city': 'Stockholm', 'age': 28}
 {'_id': ObjectId('5df68a23f106fe2d315bbc8e'), 'name': 'Sami', 'country': 'Finland', 'city': 'Helsinki', 'age': 25}
@@ -562,9 +566,9 @@ from flask import Flask, render_template
 import os # importing operating system module
 import pymongo
 
-MONGODB_URI = 'mongodb+srv://asabeneh:your_password_goes_here@30daysofpython-twxkr.mongodb.net/test?retryWrites=true&w=majority'
+MONGODB_URI = 'mongodb+srv://kennedyekanem:iVaKT9bnW3zXuMhn@flaskapp.5qvpcvz.mongodb.net/?retryWrites=true&w=majority&appName=flaskapp'
 client = pymongo.MongoClient(MONGODB_URI)
-db = client['thirty_days_of_python'] # accessing the database
+db = client['flaskapp'] # accessing the database
 
 query = {'name':'John'}
 db.students.delete_one(query)
@@ -585,7 +589,7 @@ if __name__ == '__main__':
 ```
 
 ```sh
-{'_id': ObjectId('5df68a21f106fe2d315bbc8b'), 'name': 'Asabeneh', 'country': 'Finland', 'city': 'Helsinki', 'age': 38}
+{'_id': ObjectId('5df68a21f106fe2d315bbc8b'), 'name': 'Kennedy', 'country': 'Finland', 'city': 'Helsinki', 'age': 38}
 {'_id': ObjectId('5df68a23f106fe2d315bbc8c'), 'name': 'David', 'country': 'UK', 'city': 'London', 'age': 34}
 {'_id': ObjectId('5df68a23f106fe2d315bbc8e'), 'name': 'Sami', 'country': 'Finland', 'city': 'Helsinki', 'age': 25}
 ```
@@ -604,8 +608,8 @@ from flask import Flask, render_template
 import os # importing operating system module
 import pymongo
 
-MONGODB_URI = 'mongodb+srv://asabeneh:your_password_goes_here@30daysofpython-twxkr.mongodb.net/test?retryWrites=true&w=majority'
+MONGODB_URI = 'mongodb+srv://kennedyekanem:iVaKT9bnW3zXuMhn@flaskapp.5qvpcvz.mongodb.net/?retryWrites=true&w=majority&appName=flaskapp'
 client = pymongo.MongoClient(MONGODB_URI)
-db = client['thirty_days_of_python'] # accessing the database
+db = client['flaskapp'] # accessing the database
 db.students.drop()
 ```
